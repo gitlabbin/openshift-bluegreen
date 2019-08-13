@@ -2,6 +2,14 @@ import java.text.SimpleDateFormat;
 
 // This pipeline expects a paramater newcolor which will set the newcolor of the newly deployed application.
 
+def getProject() {
+    def projects = sh(script: "oc get project|grep -v NAME|awk '{print \$1}'", returnStdout: true)
+    //sh "oc get route example -n ${project} -o jsonpath='{ .spec.to.name }' > activesvc.txt"
+    def prjList = projects.readLines()
+    echo "PRJ " + prjList[0]
+    return prjList[0]
+}
+
 node {
   // Blue/Green Deployment into Production
   // -------------------------------------
@@ -45,12 +53,9 @@ node {
 
   stage('Determine Deployment color') {
     // Determine current project
-    projects = sh(script: "oc get project|grep -v NAME|awk '{print \$1}'", returnStdout: true)
-    //sh "oc get route example -n ${project} -o jsonpath='{ .spec.to.name }' > activesvc.txt"
-    def prjList = projects.readLines()
-    echo "PRJ " + prjList[0]
+    project = getProject()
 
-    active = sh(script: "set +x; oc get route example -n ${prjList[0]} -o jsonpath='{ .spec.to.name }'", returnStdout: true)
+    active = sh(script: "set +x; oc get route example -n ${project} -o jsonpath='{ .spec.to.name }'", returnStdout: true)
 
 
     // Determine currently active Service

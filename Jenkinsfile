@@ -49,7 +49,7 @@ node {
     project = readFile('project.txt').trim()
     //sh "oc get route example -n ${project} -o jsonpath='{ .spec.to.name }' > activesvc.txt"
 
-    def active = sh(script: "set +x; oc get route example -n ${project} -o jsonpath='{ .spec.to.name }'", returnStdout: true)
+    active = sh(script: "set +x; oc get route example -n ${project} -o jsonpath='{ .spec.to.name }'", returnStdout: true)
 
 
     // Determine currently active Service

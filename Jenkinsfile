@@ -51,10 +51,10 @@ node {
 
     // Determine currently active Service
     active = readFile('activesvc.txt').trim()
+    echo "Active svc: " + active
     if (active == "example-green") {
       dest = "example-blue"
     }
-    echo "Active svc: " + active
     echo "Dest svc:   " + dest
     echo "New color:  " + newcolor
   }

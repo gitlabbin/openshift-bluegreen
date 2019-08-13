@@ -47,10 +47,13 @@ node {
     // Determine current project
     sh "oc get project|grep -v NAME|awk '{print \$1}' >project.txt"
     project = readFile('project.txt').trim()
-    sh "oc get route example -n ${project} -o jsonpath='{ .spec.to.name }' > activesvc.txt"
+    //sh "oc get route example -n ${project} -o jsonpath='{ .spec.to.name }' > activesvc.txt"
+
+    def active = sh(script: "set +x; oc get route example -n ${project} -o jsonpath='{ .spec.to.name }'", returnStdout: true)
+
 
     // Determine currently active Service
-    active = readFile('activesvc.txt').trim()
+    //active = readFile('activesvc.txt').trim()
     echo "Active svc: " + active
     if (active == "example-green") {
       dest = "example-blue"

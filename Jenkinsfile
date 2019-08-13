@@ -45,9 +45,9 @@ node {
 
   stage('Determine Deployment color') {
     // Determine current project
-    sh "oc get project|grep -v NAME|awk '{print \$1}' >project.txt"
-    project = readFile('project.txt').trim()
+    project = sh(script: "oc get project|grep -v NAME|awk '{print \$1}'", returnStdout: true)
     //sh "oc get route example -n ${project} -o jsonpath='{ .spec.to.name }' > activesvc.txt"
+    echo "PRJ " + project
 
     active = sh(script: "set +x; oc get route example -n ${project} -o jsonpath='{ .spec.to.name }'", returnStdout: true)
 
